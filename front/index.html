@@ -1,45 +1,62 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ScoreCenter — Elite 1 Féminine</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accueil Elite 1 Féminine</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body { font-family: Arial, sans-serif; background: #f6f6f6; color: #222; }
+  h1 { color: #004aad; } /* Bleu AXA */
+  .encart { background-color: #f06292; color: #fff; padding: 15px; margin: 15px 0; border-radius: 8px; }
+  a { color: #004aad; text-decoration: none; font-weight: bold; }
+</style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="wrap">
-      <h1>Elite 1 Féminine — ScoreCenter</h1>
-      <nav>
-        <a href="index.html">Accueil</a>
-        <a href="resultats.html">Résultats</a>
-        <a href="https://monclubhouse.ffr.fr/nationales/elite-1-feminine/qualification-44304" target="_blank" rel="noopener">FFR - Elite 1</a>
-      </nav>
-    </div>
-  </header>
+  <h1>Championnat Elite 1 Féminine</h1>
+  <p>Bienvenue sur le suivi du championnat Elite 1 féminine de rugby. Retrouvez matchs et classement.</p>
 
-  <main class="wrap">
-    <section id="presentation">
-      <p class="intro">Suivez le championnat Elite 1 féminin — calendrier, résultats et prochains matchs.</p>
-    </section>
+  <div class="encart" id="prochain-match">
+    <strong>Prochain match :</strong> Chargement...
+  </div>
 
-    <section class="cards">
-      <div id="next-match" class="card">
-        <h2>Prochain match</h2>
-        <div class="card-body">Chargement...</div>
-      </div>
+  <div class="encart" id="dernier-resultat">
+    <strong>Dernier résultat :</strong> Chargement...
+  </div>
 
-      <div id="last-result" class="card">
-        <h2>Dernier résultat</h2>
-        <div class="card-body">Chargement...</div>
-      </div>
-    </section>
-  </main>
+  <p><a href="resultats.html">Voir tous les résultats</a> | <a href="classement.html">Voir le classement</a></p>
 
-  <footer class="site-footer">
-    <div class="wrap">Rugby féminin — Élite 1 · Design couleurs AXA (bleu / rose)</div>
-  </footer>
+<script>
+async function loadMatches() {
+  try {
+    const res = await fetch("http://localhost:5000/api/matches");
+    const data = await res.json();
 
-  <script src="main.js"></script>
+    const now = new Date();
+
+    // Prochain match
+    const nextMatch = data
+      .filter(m => m.status === "scheduled" && new Date(m.match_date) > now)
+      .sort((a,b) => new Date(a.match_date) - new Date(b.match_date))[0];
+    document.getElementById("prochain-match").innerHTML = nextMatch
+      ? `<strong>Prochain match :</strong> ${nextMatch.home_team} vs ${nextMatch.away_team} le ${new Date(nextMatch.match_date).toLocaleString()}`
+      : "<strong>Prochain match :</strong> Aucun";
+
+    // Dernier résultat
+    const lastMatch = data
+      .filter(m => m.status === "played" && new Date(m.match_date) <= now)
+      .sort((a,b) => new Date(b.match_date) - new Date(a.match_date))[0];
+    document.getElementById("dernier-resultat").innerHTML = lastMatch
+      ? `<strong>Dernier résultat :</strong> ${lastMatch.home_team} ${lastMatch.home_score} - ${lastMatch.away_score} ${lastMatch.away_team}`
+      : "<strong>Dernier résultat :</strong> Aucun";
+
+  } catch(err) {
+    console.error(err);
+  }
+}
+
+loadMatches();
+</script>
 </body>
 </html>
+

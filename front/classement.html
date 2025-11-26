@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Classement Elite 1 Féminine</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body { font-family: Arial, sans-serif; background: #f6f6f6; color: #222; }
+  h1 { color: #004aad; } /* Bleu AXA */
+  table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+  th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ccc; }
+  th { background-color: #f06292; color: #fff; } /* Rose AXA */
+  tr:hover { background-color: #fce4ec; }
+</style>
+</head>
+<body>
+  <h1>Classement Elite 1 Féminine</h1>
+  <table id="classement-table">
+    <thead>
+      <tr>
+        <th>Équipe</th>
+        <th>Points</th>
+        <th>Points marqués</th>
+        <th>Points encaissés</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    async function loadClassement() {
+      try {
+        const res = await fetch("http://localhost:5000/api/classement");
+        const data = await res.json();
+        const tbody = document.querySelector("#classement-table tbody");
+        tbody.innerHTML = "";
+
+        data.forEach(team => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${team.team}</td>
+            <td>${team.points}</td>
+            <td>${team.scored}</td>
+            <td>${team.conceded}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        console.error("Erreur chargement classement:", err);
+      }
+    }
+
+    loadClassement();
+  </script>
+</body>
+</html>
