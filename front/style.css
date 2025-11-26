@@ -1,0 +1,32 @@
+:root{
+  --axa-blue: #0055a4;   /* bleu */
+  --axa-pink: #ff66b2;   /* rose */
+  --bg: #ffffff;
+  --muted: #6b7280;
+}
+
+*{box-sizing:border-box}
+body{font-family:Inter, Arial, Helvetica, sans-serif; margin:0; color:#111; background:var(--bg);}
+
+.wrap{max-width:980px; margin:0 auto; padding:18px;}
+
+.site-header{background:linear-gradient(90deg,var(--axa-blue), #2b7bd6); color:white; padding:14px 0;}
+.site-header h1{margin:0 0 6px 0; font-size:20px;}
+.site-header nav a{color:rgba(255,255,255,0.95); margin-right:12px; text-decoration:none; font-weight:600;}
+
+.intro{margin:10px 0 20px 0; color:var(--muted);}
+
+.cards{display:flex; gap:16px; flex-wrap:wrap;}
+.card{flex:1 1 300px; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,0.06); overflow:hidden;}
+.card h2{background:linear-gradient(90deg,var(--axa-blue), var(--axa-pink)); color:white; margin:0; padding:10px; font-size:16px;}
+.card-body{padding:12px; background:#fff;}
+
+.filters{margin:12px 0 6px 0;}
+input, select, button{padding:8px 10px; margin-right:8px; border-radius:6px; border:1px solid #ddd;}
+button{background:var(--axa-pink); color:white; border:none; cursor:pointer;}
+
+table{width:100%; border-collapse:collapse; margin-top:12px;}
+th,td{padding:10px; border:1px solid #eee; text-align:left; font-size:14px;}
+th{background:#fafafa; color:#333;}
+
+.site-footer{border-top:1px solid #eee; padding:12px 0; margin-top:18px; color:#666;}
