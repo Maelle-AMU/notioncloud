@@ -7,12 +7,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Reconstruction correcte du certificat (Render remplace souvent \n)
-const sslCA = process.env.DB_SSL_CA ? process.env.DB_SSL_CA.replace(/\\n/g, '\n') : null;
+// Health check
+app.get('/api/healthz', (req, res) => res.json({ ok: true }));
 
+// SSL CA
+const sslCA = process.env.DB_SSL_CA ? process.env.DB_SSL_CA.replace(/\\n/g, '\n') : null;
 console.log('SSL CA loaded:', !!sslCA);
 
-// Pool MySQL (avec parseInt + timeout)
+// Pool MySQL
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -23,11 +25,10 @@ const pool = mysql.createPool({
   connectionLimit: 10,
   queueLimit: 0,
   connectTimeout: 10000,
-  // n'ajoute ssl que si on a un CA
   ssl: sslCA ? { rejectUnauthorized: true, ca: sslCA } : undefined
 });
 
-// Endpoint de test de connexion BDD (log détaillé en cas d'erreur)
+// Test DB route
 app.get('/api/dbtest', async (req, res) => {
   try {
     const conn = await pool.getConnection();
@@ -35,7 +36,6 @@ app.get('/api/dbtest', async (req, res) => {
     conn.release();
     res.json({ ok: true, msg: 'Connexion BDD réussie' });
   } catch (err) {
-    // Log détaillé (ne contient pas de secret)
     console.error('DB test failed:', {
       code: err.code,
       errno: err.errno,
@@ -43,7 +43,6 @@ app.get('/api/dbtest', async (req, res) => {
       message: err.message,
       stack: err.stack ? err.stack.split('\n').slice(0,5).join('\n') : undefined
     });
-    // Renvoie plus d'infos côté client (sans secrets)
     res.status(500).json({
       ok: false,
       error: 'Impossible de se connecter à la BDD',
@@ -57,7 +56,7 @@ app.get('/api/dbtest', async (req, res) => {
   }
 });
 
-// Routes existantes (matches / classement)
+// Matches route
 app.get('/api/matches', async (req, res) => {
   try {
     const [rows] = await pool.query('SELECT * FROM `match` ORDER BY match_date ASC');
@@ -68,6 +67,7 @@ app.get('/api/matches', async (req, res) => {
   }
 });
 
+// Classement route
 app.get('/api/classement', async (req, res) => {
   try {
     const [rows] = await pool.query("SELECT * FROM `match` WHERE status='played'");
@@ -94,6 +94,7 @@ app.get('/api/classement', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3010;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
 
