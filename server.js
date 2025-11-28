@@ -51,6 +51,9 @@ connection.connect((err) => {
   }
 
 });
+console.log('DB_HOST =', process.env.DB_HOST);
+console.log('DB_PORT =', process.env.DB_PORT);
+console.log('DB_USER =', process.env.DB_USER);
 
 // --- LES ROUTES DE L'API (Les URLs disponibles) ---
 
