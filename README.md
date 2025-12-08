@@ -43,8 +43,8 @@ http://localhost:3000
 2. Variables d’environnement
 
 Les variables d'environnement prennent la forme suivante 
-(il n'est pas possible de les insérer ici car Github bloquera l'import
-)
+(il n'est pas possible de les insérer ici car Github bloquera l'import)
+
 DB_HOST=xxx.aivencloud.com
 DB_PORT=xxxxx
 DB_USER=xxxx
@@ -109,13 +109,11 @@ Requêtes API via fetch
 Pour afficher le tableau complet des rencontres via GET /api/matches
 
 6. Déploiement (Render)
-Build Command :
-npm install
+Build Command : npm install
 
-Start Command :
-npm start
+Start Command : node server.js
 
-Variables d’environnement à ajouter dans Render :
+Variables d’environnement qui ont été ajoutées dans Render :
 
 DB_HOST
 
@@ -127,19 +125,20 @@ DB_PASSWORD
 
 DB_DATABASE
 
-📎 7. Liens à fournir (à compléter)
+(les données de ces variables ne peuvent pas vous être fournis sur ce fichier)
+
+7. Liens à fournir
 
 URL API :
-https://votre-api.onrender.com
+https://notioncloud.onrender.com
 
 Endpoints :
-https://votre-api.onrender.com/api/healthz
+https://notioncloud.onrender.com/api/healthz
 
-https://votre-api.onrender.com/api/matches
+https://notioncloud.onrender.com/api/matches
 
 Front :
-https://votre-front.onrender.com
+https://frontnotioncloud.onrender.com/
 
-/
-
-/resultats
+Resultats :
+https://frontnotioncloud.onrender.com/resultats.html
